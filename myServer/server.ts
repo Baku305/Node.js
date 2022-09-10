@@ -1,9 +1,20 @@
 
-type Name = string
+import express from "express"
+import "express-async-errors"
 
-const name: Name = "Francesco"
+const app = express()
 
-throw new Error("Something went wrong");
+app.get("/", (request,response) => {
 
+ response.send("Up and runnig!")
 
-console.log(name)
+})
+
+const port = 3000
+
+app.listen(port, () => {
+
+ console.log(`[server]: Server is runnig at localhost:${port}`)
+
+})
+
