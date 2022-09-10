@@ -6,7 +6,7 @@ const app = express()
 
 app.get("/", (request,response) => {
 
- response.send("Up and runnig!")
+ response.send("Up and runnig and updated!")
 
 })
 
