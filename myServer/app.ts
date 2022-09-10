@@ -3,9 +3,9 @@ import "express-async-errors"
 
 export const app = express()
 
-app.get("/", (request,response) => {
+app.get("/planets", (request,response) => {
 
- response.send("Up and runnig and updated!")
+ response.json([{ name: "Mercury" }, { name: "Venus" }])
 
 })
 
