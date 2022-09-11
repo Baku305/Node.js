@@ -9,3 +9,13 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Coffee {
+  id                  Int        @id @default(autoincrement())
+  name                String     @db.VarChar(255)
+  description         String?
+  origin              String
+  type                String
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+ }
