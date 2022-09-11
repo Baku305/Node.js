@@ -12,4 +12,6 @@ export function luckyDraw(player) {
  });
 }
 
-//console.log(luckyDraw("francesco").then((value) => console.log(value)))
+luckyDraw("francesco").then((value) => console.log(value)).catch((error) => console.log(error))
+luckyDraw("marco").then((value) => console.log(value)).catch((error) => console.log(error))
+luckyDraw("luigi").then((value) => console.log(value)).catch((error) => console.log(error))
