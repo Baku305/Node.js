@@ -1,7 +1,8 @@
 import prisma from "./prisma/client";
 import express from "express"
 import "express-async-errors"
-import { coffeeData } from "./validation/coffeeValidation";
+import { coffeeData, coffeeSchema, validate, validationErrorMiddleware } from "./validation/coffeeValidation";
+
 
 export const app = express()
 
@@ -17,6 +18,7 @@ app.get("/coffee",async  (request,response) => {
 })
 
 app.get("/coffee/:id(\\d+)", async (request, response, next) => {
+
  const coffeId = Number(request.params.id);
 
  const coffee = await prisma.coffee.findUnique({
@@ -33,14 +35,17 @@ app.get("/coffee/:id(\\d+)", async (request, response, next) => {
 
 app.post(
  "/coffee",
- async (request, response) => {
-  const coffeeData: coffeeData = request.body;
+ async (request, response, next) => {
 
-  const coffee = await prisma.coffee.create({
-   data: coffeeData,
-  });
+   const coffeeData : coffeeData = request.body;
+   const parsedCoffee = coffeeSchema.parse(coffeeData)
+   const coffee = await prisma.coffee.create({
+    data: parsedCoffee,
+   })
 
-  response.status(201).json(coffee);
+
+   response.status(201).json(coffee);
+
  }
 );
 
@@ -55,7 +60,7 @@ app.delete("/coffee/:id(\\d+)", async (request, response, next) => {
   response.status(204).end();
  } catch (error) {
   response.status(404);
-  next(`Cannot DELETE /coffee/${planetID}`);
+  next(`Cannot Delete /coffee/${planetID}`);
  }
 });
 
@@ -63,12 +68,13 @@ app.put(
  "/coffee/:id(\\d+)",
  async (request, response, next) => {
   const coffeeData: coffeeData = request.body;
+  const parsedCoffee = coffeeSchema.parse(coffeeData)
   const planetID = Number(request.params.id);
 
   try {
    const coffee = await prisma.coffee.update({
     where: { id: planetID },
-    data: coffeeData,
+    data: parsedCoffee,
    });
 
    response.status(200).json(coffee);
@@ -79,3 +85,4 @@ app.put(
  }
 );
 
+app.use(validationErrorMiddleware);
