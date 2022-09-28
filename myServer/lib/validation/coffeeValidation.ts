@@ -1,7 +1,5 @@
 
 import { z } from "zod"
-import { ErrorRequestHandler } from "express";
-
 
 export const coffeeSchema = z.object({
  name : z.string(),
@@ -12,19 +10,4 @@ export const coffeeSchema = z.object({
 
 export type coffeeData = z.infer<typeof coffeeSchema>
 
-export const validationErrorMiddleware : ErrorRequestHandler = (error,
- request,
- response,
- next
-) => {
-
- if (error instanceof z.ZodError) {
-  response.status(422).send({
-   errors: error.issues,
-  });
-  next();
- } else {
-  next(error);
- }
-}
 
