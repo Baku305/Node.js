@@ -1,7 +1,7 @@
 import prisma from "./prisma/client";
 import express from "express"
 import "express-async-errors"
-import { coffeeData } from "./validation/coffeeValidation";
+import { coffeeData, coffeeSchema } from "./validation/coffeeValidation";
 
 export const app = express()
 
