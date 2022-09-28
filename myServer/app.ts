@@ -19,13 +19,16 @@ app.get("/coffee",async  (request,response) => {
 app.post(
  "/coffee",
  async (request, response) => {
-  const coffeeData: coffeeData = request.body;
 
-  const coffee = await prisma.coffee.create({
-   data: coffeeData,
-  });
+   const coffeeData : coffeeData = request.body;
+   const parsedCoffee = coffeeSchema.parse(coffeeData)
+   const coffee = await prisma.coffee.create({
+    data: parsedCoffee,
+   })
 
-  response.status(201).json(coffee);
+
+   response.status(201).json(coffee);
+
  }
 );
 
