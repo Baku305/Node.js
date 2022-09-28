@@ -4,11 +4,11 @@ import "express-async-errors";
 import {
  coffeeData,
  coffeeSchema,
- validationErrorMiddleware,
 } from "./lib/validation/coffeeValidation";
 import cors from "cors";
 
 import { initMulterMiddleware } from "./lib/middleware/multer";
+import { validationErrorMiddleware } from "./lib/middleware/validationErrorMiddleware";
 
 export const app = express();
 
