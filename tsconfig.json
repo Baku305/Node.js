@@ -4,6 +4,6 @@
   "outDir": "./dist",
   "sourceMap": true
  },
- "include": ["./**/*.ts"],
+ "include": ["./**/*.ts", "log the data/example.js"],
  "exclude": ["./**/*.test.ts"]
 }

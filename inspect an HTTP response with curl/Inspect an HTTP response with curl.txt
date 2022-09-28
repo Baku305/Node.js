@@ -1,1 +1,0 @@
-Inspect an HTTP response with curl
