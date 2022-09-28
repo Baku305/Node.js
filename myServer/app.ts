@@ -1,12 +1,20 @@
-import prisma from "./prisma/client";
-import express from "express"
-import "express-async-errors"
+import prisma from "./prisma/client";;
+import express from "express";
+import "express-async-errors";
 import { coffeeData, coffeeSchema, validationErrorMiddleware } from "./validation/coffeeValidation";
-
+import cors from "cors"
 
 export const app = express()
 
+const corsOptions = {
+ origin: "http://localhost:8080"
+}
+
 app.use(express.json())
+
+app.use(cors("http://localhost:8080"))
+
+
 
 app.get("/coffee",async  (request,response) => {
 
