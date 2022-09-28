@@ -1,32 +1,34 @@
-import prisma from "./prisma/client";;
+import prisma from "./lib/prisma/client";
 import express from "express";
 import "express-async-errors";
-import { coffeeData, coffeeSchema, validationErrorMiddleware } from "./validation/coffeeValidation";
-import cors from "cors"
+import {
+ coffeeData,
+ coffeeSchema,
+ validationErrorMiddleware,
+} from "./lib/validation/coffeeValidation";
+import cors from "cors";
 
-export const app = express()
+import { initMulterMiddleware } from "./lib/middleware/multer";
+
+export const app = express();
+
+const upload = initMulterMiddleware();
 
 const corsOptions = {
- origin: "http://localhost:8080"
-}
+ origin: "http://localhost:8080",
+};
 
-app.use(express.json())
+app.use(express.json());
 
-app.use(cors("http://localhost:8080"))
+app.use(cors(corsOptions));
 
+app.get("/coffee", async (request, response) => {
+ const coffee = await prisma.coffee.findMany();
 
-
-app.get("/coffee",async  (request,response) => {
-
-
- const coffee = await prisma.coffee.findMany()
-
- response.json(coffee)
-
-})
+ response.json(coffee);
+});
 
 app.get("/coffee/:id(\\d+)", async (request, response, next) => {
-
  const coffeId = Number(request.params.id);
 
  const coffee = await prisma.coffee.findUnique({
@@ -41,21 +43,15 @@ app.get("/coffee/:id(\\d+)", async (request, response, next) => {
  response.json(coffee);
 });
 
-app.post(
- "/coffee",
- async (request, response, next) => {
+app.post("/coffee", async (request, response, next) => {
+ const coffeeData: coffeeData = request.body;
+ const parsedCoffee = coffeeSchema.parse(coffeeData);
+ const coffee = await prisma.coffee.create({
+  data: parsedCoffee,
+ });
 
-   const coffeeData : coffeeData = request.body;
-   const parsedCoffee = coffeeSchema.parse(coffeeData)
-   const coffee = await prisma.coffee.create({
-    data: parsedCoffee,
-   })
-
-
-   response.status(201).json(coffee);
-
- }
-);
+ response.status(201).json(coffee);
+});
 
 app.delete("/coffee/:id(\\d+)", async (request, response, next) => {
  const planetID = Number(request.params.id);
@@ -72,24 +68,38 @@ app.delete("/coffee/:id(\\d+)", async (request, response, next) => {
  }
 });
 
-app.put(
- "/coffee/:id(\\d+)",
+app.put("/coffee/:id(\\d+)", async (request, response, next) => {
+ const coffeeData: coffeeData = request.body;
+ const parsedCoffee = coffeeSchema.parse(coffeeData);
+ const planetID = Number(request.params.id);
+
+ try {
+  const coffee = await prisma.coffee.update({
+   where: { id: planetID },
+   data: parsedCoffee,
+  });
+
+  response.status(200).json(coffee);
+ } catch (error) {
+  response.status(404);
+  next(`Cannot PUT /coffee/${planetID}`);
+ }
+});
+
+app.post(
+ "/coffee/:id(\\d+)/photo",
+ upload.single("photo"),
  async (request, response, next) => {
-  const coffeeData: coffeeData = request.body;
-  const parsedCoffee = coffeeSchema.parse(coffeeData)
-  const planetID = Number(request.params.id);
+  console.log("request.file", request.file)
 
-  try {
-   const coffee = await prisma.coffee.update({
-    where: { id: planetID },
-    data: parsedCoffee,
-   });
-
-   response.status(200).json(coffee);
-  } catch (error) {
-   response.status(404);
-   next(`Cannot PUT /coffee/${planetID}`);
+  if (!request.file) {
+   response.status(400);
+   return next("No photo file uploaded.")
   }
+
+  const photoFileName = request.file.filename;
+
+  response.status(201).json({photoFileName})
  }
 );
 
