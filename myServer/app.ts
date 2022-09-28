@@ -1,10 +1,11 @@
-import { PrismaClient } from "@prisma/client"
+import prisma from "./prisma/client";
 import express from "express"
 import "express-async-errors"
-
-const prisma = new PrismaClient()
+import { coffeeData } from "./validation/coffeeValidation";
 
 export const app = express()
+
+app.use(express.json())
 
 app.get("/coffee",async  (request,response) => {
 
@@ -14,4 +15,17 @@ app.get("/coffee",async  (request,response) => {
  response.json(coffee)
 
 })
+
+app.post(
+ "/coffee",
+ async (request, response) => {
+  const coffeeData: coffeeData = request.body;
+
+  const coffee = await prisma.coffee.create({
+   data: coffeeData,
+  });
+
+  response.status(201).json(coffee);
+ }
+);
 
