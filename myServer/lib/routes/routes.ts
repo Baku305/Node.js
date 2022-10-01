@@ -6,7 +6,7 @@ import {
  getCoffeeById,
  updateCoffee,
  uploadPhoto,
-} from "../config/config";
+} from "../controller/controller";
 import { initMulterMiddleware } from "../middleware/multer";
 import { typeErrorMiddleWare } from "../middleware/typeErrorMiddleware";
 
