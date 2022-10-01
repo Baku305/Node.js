@@ -17,6 +17,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use("/coffee", router);
+app.use("/coffee/photos", express.static("uploads"));
 app.use(validationErrorMiddleware);
 
 

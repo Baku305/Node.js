@@ -16,6 +16,7 @@ model Coffee {
   description         String?
   origin              String
   type                String
+  photoFilename       String?    @db.VarChar(255)
   createdAt           DateTime   @default(now())
   updatedAt           DateTime   @updatedAt
  }

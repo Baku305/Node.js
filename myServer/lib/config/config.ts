@@ -85,7 +85,19 @@ export const uploadPhoto = async ( req : Request, res : Response, next : NextFun
   return next("no photo file uploaded")
  }
 
- const photoFileName = req.file.filename;
+ const coffeId = Number(req.params.id)
+ const photoFilename = req.file.filename;
 
- res.status(201).json({photoFileName})
+ try {
+  await prisma.coffee.update({
+   where : {id : coffeId},
+   data : { photoFilename }
+  })
+ } catch (error) {
+  res.status(404)
+  next("Cannot post photo")
+
+ }
+
+ res.status(201).json({photoFilename})
 }
