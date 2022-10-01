@@ -8,6 +8,7 @@ import {
  uploadPhoto,
 } from "../config/config";
 import { initMulterMiddleware } from "../middleware/multer";
+import { typeErrorMiddleWare } from "../middleware/typeErrorMiddleware";
 
 const router = express.Router();
 const upload = initMulterMiddleware()
