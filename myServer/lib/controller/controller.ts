@@ -1,9 +1,6 @@
 import prisma from "../prisma/client";
 import { Request, Response, NextFunction } from "express";
 
-import { coffeeSchema } from "../validation/coffeeValidation";
-import { initMulterMiddleware } from "../middleware/multer";
-
 
 export const getAllCoffee = async (req: Request, res: Response) => {
 
@@ -32,7 +29,7 @@ export const getCoffeeById = async (
 };
 
 export const createCoffee = async (req: Request, res: Response) => {
- coffeeSchema.parse(req.body)
+ //coffeeSchema.parse(req.body)
  const coffee = await prisma.coffee.create({
   data: req.body,
  });
@@ -63,7 +60,7 @@ export const updateCoffee = async (
  res: Response,
  next: NextFunction
 ) => {
- coffeeSchema.parse(req.body)
+ //coffeeSchema.parse(req.body)
  try {
   await prisma.coffee.update({
    where: { id: Number(req.params.id) },

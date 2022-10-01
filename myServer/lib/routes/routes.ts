@@ -8,7 +8,7 @@ import {
  uploadPhoto,
 } from "../controller/controller";
 import { initMulterMiddleware } from "../middleware/multer";
-import { typeErrorMiddleWare } from "../middleware/typeErrorMiddleware";
+import { typeValidationMiddleWare } from "../middleware/typeErrorMiddleware";
 
 const router = express.Router();
 const upload = initMulterMiddleware()
@@ -16,9 +16,9 @@ const upload = initMulterMiddleware()
 
 router.get("/", getAllCoffee);
 router.get("/:id(\\d+)", getCoffeeById);
-router.post("/", createCoffee);
+router.post("/",typeValidationMiddleWare, createCoffee);
 router.delete("/:id(\\d+)", deleteCoffee);
-router.put("/:id(\\d+)", updateCoffee);
+router.put("/:id(\\d+)",typeValidationMiddleWare, updateCoffee);
 router.post("/:id(\\d+)/photo", upload.single("photo"),uploadPhoto);
 
 export default router;
