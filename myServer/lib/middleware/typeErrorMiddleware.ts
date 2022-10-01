@@ -9,7 +9,6 @@ export const typeValidationMiddleWare  = (
  res : Response,
  next : NextFunction
 ) => {
-
  coffeeSchema.parse(req.body)
-
+ next()
 };
