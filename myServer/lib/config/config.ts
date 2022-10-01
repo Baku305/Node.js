@@ -1,10 +1,12 @@
 import prisma from "../prisma/client";
 import { Request, Response, NextFunction } from "express";
-import { prismaMock } from "../prisma/cliet.mock";
+
 import { coffeeSchema } from "../validation/coffeeValidation";
 import { initMulterMiddleware } from "../middleware/multer";
 
+
 export const getAllCoffee = async (req: Request, res: Response) => {
+
  const coffee = await prisma.coffee.findMany();
 
  res.json(coffee);
@@ -74,8 +76,7 @@ export const updateCoffee = async (
  }
 };
 
-export const uploadPhoto = () => {
- return async ( req : Request, res : Response, next : NextFunction) => {
+export const uploadPhoto = async ( req : Request, res : Response, next : NextFunction) => {
 
  console.log("request.file", req.file)
 
@@ -87,4 +88,4 @@ export const uploadPhoto = () => {
  const photoFileName = req.file.filename;
 
  res.status(201).json({photoFileName})
-}}
+}

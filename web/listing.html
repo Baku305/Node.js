@@ -10,11 +10,9 @@
   <script>
    const fetchCoffee = async () => {
     const response = await fetch("http://localhost:3000/coffee");
-    const coffee = await response.json();
-
+    const coffee = await response.json()
     console.log(coffee);
    };
-
    fetchCoffee();
   </script>
  </body>
