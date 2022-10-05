@@ -2,10 +2,10 @@
 import { number, object, z } from "zod"
 
 export const coffeeSchema = z.object({
- name : z.string(),
+ name : z.string().min(1),
  description: z.string().optional(),
- origin: z.string(),
- type: z.string(),
+ origin: z.string().min(1),
+ type: z.string().min(1),
 }).strict()
 
 export type coffeeData = z.infer<typeof coffeeSchema>
