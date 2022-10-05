@@ -15,7 +15,7 @@ authRouter.get("/login", (req: Request, res: Response, next: NextFunction) => {
 });
 
 authRouter.get(
- "/auth/github/login",
+ "/github/login",
  passport.authenticate("github", {
   scope: ["user:email"],
  })
@@ -23,18 +23,18 @@ authRouter.get(
 
 authRouter.get(
  "/github/callback",
+ //@ts-ignore
  passport.authenticate("github", {
-  //@ts-ignore
   failureRedirect: "/auth/github/login",
   keepSessionInfo: true,
  })
-),
+,
  (req: Request, res: Response) => {
   if (typeof req.session.redirectTo !== "string") {
    return res.status(500).end();
   }
   res.redirect(req.session.redirectTo);
- };
+ })
 
 authRouter.get("/logout", (req:Request,res:Response,next:NextFunction)=>{
  if (typeof req.query.redirectTo !== "string" || !req.query.redirectTo) {

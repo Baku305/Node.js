@@ -7,7 +7,7 @@ import { validationErrorMiddleware } from "./lib/middleware/validationErrorMiddl
 import { initCorsMiddleware } from "./lib/middleware/cors";
 import { initSessionMiddleware } from "./lib/middleware/session";
 import { passport } from "./lib/middleware/passport"
-import csp from 'express-csp-header'
+
 
 
 export const app = express();
@@ -21,13 +21,6 @@ app.use(passport.session())
 app.use(express.json());
 
 app.use(initCorsMiddleware());
-
-app.use(csp({
- policies: {
-     'default-src': [csp.NONE],
-     'img-src': [csp.SELF],
- }
-}));
 
 app.use("/coffee", coffeeRouter);
 
