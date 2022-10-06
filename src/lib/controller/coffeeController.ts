@@ -1,9 +1,7 @@
 import prisma from "../prisma/client";
 import { Request, Response, NextFunction } from "express";
 
-
 export const getAllCoffee = async (req: Request, res: Response) => {
-
  const coffee = await prisma.coffee.findMany();
 
  res.json(coffee);
@@ -30,8 +28,13 @@ export const getCoffeeById = async (
 
 export const createCoffee = async (req: Request, res: Response) => {
  //coffeeSchema.parse(req.body)
+ const username = req.user?.username as string;
  const coffee = await prisma.coffee.create({
-  data: req.body,
+  data: {
+   ...req.body,
+   createdBy: username,
+   updatedBy: username,
+  },
  });
 
  res.status(201).json(coffee);
@@ -61,10 +64,14 @@ export const updateCoffee = async (
  next: NextFunction
 ) => {
  //coffeeSchema.parse(req.body)
+ const username = req.user?.username as string;
  try {
   await prisma.coffee.update({
    where: { id: Number(req.params.id) },
-   data: req.body,
+   data: {
+    ...req.body,
+    updatedBy: username,
+   },
   });
   res.status(200).json(req.body);
  } catch (error) {
@@ -73,28 +80,30 @@ export const updateCoffee = async (
  }
 };
 
-export const uploadPhoto = async ( req : Request, res : Response, next : NextFunction) => {
+export const uploadPhoto = async (
+ req: Request,
+ res: Response,
+ next: NextFunction
+) => {
+ console.log("request.file", req.file);
 
- console.log("request.file", req.file)
-
- if(!req.file){
+ if (!req.file) {
   res.status(400);
-  return next("no photo file uploaded")
+  return next("no photo file uploaded");
  }
 
- const coffeId = Number(req.params.id)
+ const coffeId = Number(req.params.id);
  const photoFilename = req.file.filename;
 
  try {
   await prisma.coffee.update({
-   where : {id : coffeId},
-   data : { photoFilename }
-  })
+   where: { id: coffeId },
+   data: { photoFilename },
+  });
  } catch (error) {
-  res.status(404)
-  next("Cannot post photo")
-
+  res.status(404);
+  next("Cannot post photo");
  }
 
- res.status(201).json({photoFilename})
-}
+ res.status(201).json({ photoFilename });
+};
