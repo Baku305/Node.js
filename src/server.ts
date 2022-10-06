@@ -1,6 +1,6 @@
 import { app } from "./app"
 import "dotenv/config"
-import config from "./lib/config/config"
+import config from "./config/config"
 
 const port = config.PORT
 
